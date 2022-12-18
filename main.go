@@ -16,7 +16,7 @@ func main() {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		// send html file from public folder
-		return c.SendFile("../index.html")
+		return c.SendFile("./index.html")
 	})
 
 	app.Get("colleges/", handlers.SearchCollege)
