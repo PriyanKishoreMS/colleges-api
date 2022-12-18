@@ -14,9 +14,10 @@ func main() {
 
 	config.Connect()
 
+	app.Static("/", "./public")
+
 	app.Get("/", func(c *fiber.Ctx) error {
-		// send html file from public folder
-		return c.SendFile("./index.html")
+		return c.SendFile("./public/index.html")
 	})
 
 	app.Get("colleges/", handlers.SearchCollege)
