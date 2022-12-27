@@ -4,13 +4,30 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
+	"golang.org/x/time/rate"
 	"github.com/PriyanKishoreMS/colleges-list-api/config"
 	"github.com/PriyanKishoreMS/colleges-list-api/entities"
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetAllStates(c *fiber.Ctx) error {
+type APIhandler struct{
+	rateLimiter *rate.Limiter
+}
+func NewAPIhandler() *APIhandler {
+	return &APIhandler{
+		//bucket size 10 and refill rate is 3/sec
+		rateLimiter: rate.NewLimiter(rate.Every(time.Second)*3,10),
+	}
+}
+
+func(handlerObj *APIhandler) GetAllStates(c *fiber.Ctx) error {
+
+	err := handlerObj.rateLimiter.Wait(c.Context())
+	if  err != nil{
+		return err
+	}
 
 	var states []string
 
@@ -26,7 +43,12 @@ func GetAllStates(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(states)
 }
 
-func GetDistrictsByState(c *fiber.Ctx) error {
+func(handlerObj *APIhandler) GetDistrictsByState(c *fiber.Ctx) error {
+
+	err := handlerObj.rateLimiter.Wait(c.Context())
+	if  err != nil{
+		return err
+	}
 
 	state := c.Params("state")
 	var districts []string
@@ -42,7 +64,12 @@ func GetDistrictsByState(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(districts)
 }
 
-func GetAllCollegesInState(c *fiber.Ctx) error {
+func(handlerObj *APIhandler) GetAllCollegesInState(c *fiber.Ctx) error {
+
+	err := handlerObj.rateLimiter.Wait(c.Context())
+	if  err != nil{
+		return err
+	}
 
 	state := c.Params("state")
 	page, _ := strconv.Atoi(c.Query("page", "1"))
@@ -83,7 +110,12 @@ func GetAllCollegesInState(c *fiber.Ctx) error {
 	})
 }
 
-func GetAllCollegesInDistrict(c *fiber.Ctx) error {
+func (handlerObj *APIhandler) GetAllCollegesInDistrict(c *fiber.Ctx) error {
+
+	err := handlerObj.rateLimiter.Wait(c.Context())
+	if  err != nil{
+		return err
+	}	
 
 	state := c.Params("state")
 	district := c.Params("district")
@@ -127,7 +159,12 @@ func GetAllCollegesInDistrict(c *fiber.Ctx) error {
 
 }
 
-func SearchCollege(c *fiber.Ctx) error {
+func (handlerObj *APIhandler) SearchCollege(c *fiber.Ctx) error {
+
+	err := handlerObj.rateLimiter.Wait(c.Context())
+	if  err != nil{
+		return err
+	}	
 
 	search := c.Query("search")
 	page, _ := strconv.Atoi(c.Query("page", "1"))
