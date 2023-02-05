@@ -1,5 +1,7 @@
 # Indian Colleges API
 
+`NOTE: The RDS instance is discontinued and the repository is not maintained, you can get the sql dump or the csv from the data directory.`
+
 Click here to go to the API: [https://colleges-api.onrender.com](https://colleges-api.onrender.com/)
 
 This API gives you access to a database containing 43,000 colleges in India and allows you to search and list them by state and district, giving you a complete list of all the colleges in a certain state or district.
