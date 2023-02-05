@@ -13,6 +13,7 @@ func main() {
 	app := fiber.New()
 
 	config.Connect()
+	handlerObj := handlers.NewAPIhandler();
 
 	app.Static("/", "./public")
 
@@ -20,11 +21,11 @@ func main() {
 		return c.SendFile("./public/index.html")
 	})
 
-	app.Get("colleges/", handlers.SearchCollege)
-	app.Get("colleges/states", handlers.GetAllStates)
-	app.Get("colleges/:state/districts", handlers.GetDistrictsByState)
-	app.Get("colleges/:state", handlers.GetAllCollegesInState)
-	app.Get("colleges/:state/:district", handlers.GetAllCollegesInDistrict)
+	app.Get("colleges/", handlerObj.SearchCollege)
+	app.Get("colleges/states", handlerObj.GetAllStates)
+	app.Get("colleges/:state/districts", handlerObj.GetDistrictsByState)
+	app.Get("colleges/:state", handlerObj.GetAllCollegesInState)
+	app.Get("colleges/:state/:district", handlerObj.GetAllCollegesInDistrict)
 
 	log.Fatal(app.Listen(":3000"))
 }
